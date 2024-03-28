@@ -64,10 +64,11 @@ export function Home() {
 			<View className="my-4" />
 			<View className="items-start w-full px-6 text-gray-800">
 				<Text className="text-base-gray-2">Gastos</Text>
-				<Button icon={<PlusIcon color="#f3f4f6" />} />
+				<Button icon={<PlusIcon color="#f3f4f6" />}>
+					<Text className="text-gray-100 font-semibold ml-2">Novo gasto</Text>
+				</Button>
 			</View>
 			<View className="my-4" />
-			<Image source={require('../../assets/blur-top.png')} className="absolute top-0 w-full" />
 			<Expenses expenseGroup={expensesGroup} />
 			<Image source={require('../../assets/blur-native.png')} className="absolute bottom-0 w-full" />
 		</View>

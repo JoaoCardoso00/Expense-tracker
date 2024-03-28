@@ -1,15 +1,19 @@
 import { ReactNode } from "react";
-import { Text, View } from "react-native";
+import { Pressable, PressableProps, Text, View } from "react-native";
 
-type ButtonProps = {
+type ButtonProps = PressableProps & {
 	icon?: ReactNode
+	children: ReactNode
 }
 
-export function Button({ icon }: ButtonProps) {
+export function Button({ icon, children, ...rest }: ButtonProps) {
 	return (
-		<View className="flex items-center justify-center flex-row bg-base-gray-2 mt-2 w-full py-3 rounded-lg">
+		<Pressable
+			className="flex items-center justify-center flex-row bg-base-gray-2 mt-2 w-full py-3 rounded-lg"
+			{...rest}
+		>
 			{icon}
-			<Text className="text-gray-100 font-semibold ml-2">Novo gasto</Text>
-		</View>
+			{children}
+		</Pressable>
 	)
 }
