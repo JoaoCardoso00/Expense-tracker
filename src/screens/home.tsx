@@ -4,6 +4,8 @@ import { Button } from '../components/Button';
 import { PlusIcon } from 'react-native-heroicons/solid';
 import { Expenses } from '../components/Expenses';
 import { Expense } from '../components/Expense';
+import { useContext } from 'react';
+import { UserContext } from '../lib/context';
 
 const expenses: Expense[] = [
 	{
@@ -50,6 +52,11 @@ const expensesGroup = [
 ]
 
 export function Home() {
+
+	const { user } = useContext(UserContext)
+
+	console.log(user)
+
 	return (
 		<View className="bg-base-gray-7 flex-1 items-center h-full" >
 			<View className="my-4" />

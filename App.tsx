@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Login } from './src/screens/login';
 import { UserContext } from './src/lib/context';
 import { useUserData } from './src/lib/hooks';
+import { Register } from './src/screens/register';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -36,7 +37,8 @@ export default function App() {
     <UserContext.Provider value={userData}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='login' component={Login} />
+          <Stack.Screen name='Login' component={Login} />
+          <Stack.Screen name='Register' component={Register} />
           <Stack.Screen name='AppNavigator' component={AppNavigator} />
         </Stack.Navigator>
       </NavigationContainer >

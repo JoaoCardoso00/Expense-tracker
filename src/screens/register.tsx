@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { View, Text, TextInput, Alert, Pressable } from "react-native";
 import { Button } from "../components/Button";
 import { useForm, Controller } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { z } from "zod";
 
@@ -13,37 +13,45 @@ type RootStackParamList = {
 	Register: undefined;
 };
 
-type LoginPageProps = {
-	navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+type RegisterPageProps = {
+	navigation: StackNavigationProp<RootStackParamList, 'Register'>;
 };
 
 const formSchema = z.object({
 	email: z.string().email({ message: "Email inválido!" }).nonempty({ message: "Email obrigatório!" }),
-	password: z.string().min(6, { message: "Senha deve ter pelo menos 6 caracteres!" }).nonempty({ message: "Senha obrigatória!" })
+	password: z.string().min(6, { message: "Senha deve ter pelo menos 6 caracteres!" }).nonempty({ message: "Senha obrigatória!" }),
+	confirmPassword: z.string().min(6, { message: "Confirmação de senha deve ter pelo menos 6 caracteres!" }).nonempty({ message: "Confirmação de senha obrigatória!" })
+}).refine(data => data.password === data.confirmPassword, {
+	message: "As senhas não coincidem!",
+	path: ["confirmPassword"],
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-export function Login({ navigation }: LoginPageProps) {
+export function Register({ navigation }: RegisterPageProps) {
 	const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: zodResolver(formSchema)
 	});
 
-	async function handleLogin(formData: FormData) {
+	async function handleRegister(formData: FormData) {
+		if (formData.password !== formData.confirmPassword) {
+			Alert.alert("As senhas não coincidem!");
+			return;
+		}
+
 		try {
-			await signInWithEmailAndPassword(auth, formData.email, formData.password);
+			await createUserWithEmailAndPassword(auth, formData.email, formData.password);
 			navigation.navigate("AppNavigator");
 		} catch (error) {
-			console.log(error)
-			Alert.alert("Erro ao realizar autenticação, por favor tente novamente");
+			Alert.alert("Erro ao realizar registro, por favor tente novamente");
 		}
 	}
 
 	return (
 		<View className="flex-1 items-center justify-center">
 			<View className="absolute top-40 w-full px-6">
-				<Text className="text-4xl font-bold">Login</Text>
-				<Text className="text-xl text-base-gray-3">Bem vindo! entre para começarmos</Text>
+				<Text className="text-4xl font-bold">Registrar</Text>
+				<Text className="text-xl text-base-gray-3">Crie sua conta</Text>
 			</View>
 
 			<View className="w-full px-6 mb-4">
@@ -86,15 +94,38 @@ export function Login({ navigation }: LoginPageProps) {
 			</View>
 
 			<View className="w-full px-6 mt-4">
-				<Button onPress={handleSubmit(handleLogin)}>
+				<Text className="mb-2 text-base-gray-2">Confirmar Senha</Text>
+				<Controller
+					control={control}
+					name="confirmPassword"
+					render={({ field: { onChange, onBlur, value } }) => (
+						<TextInput
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							placeholder="Confirmar Senha"
+							secureTextEntry={true}
+							autoCapitalize="none"
+							className="px-1.5 text-lg border placeholder:text-lg border-base-gray-3 rounded-md py-1.5 w-full"
+						/>
+					)}
+				/>
+				{errors.confirmPassword && <Text className="text-red-500">{errors.confirmPassword.message}</Text>}
+			</View>
+
+			<View className="w-full px-6 mt-4">
+				<Button onPress={handleSubmit(handleRegister)}>
 					<Text className="text-base-gray-7 font-semibold">
-						Entrar
+						Registrar
 					</Text>
 				</Button>
 			</View>
-			<Pressable onPress={() => navigation.navigate("Register")}>
+
+
+
+			<Pressable onPress={() => navigation.navigate("Login")}>
 				<Text className="mt-10">
-					Não tem uma conta? Registre-se
+					Já tem uma conta? Entre
 				</Text>
 			</Pressable>
 		</View>
