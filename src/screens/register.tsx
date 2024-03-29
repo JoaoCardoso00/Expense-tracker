@@ -121,8 +121,6 @@ export function Register({ navigation }: RegisterPageProps) {
 				</Button>
 			</View>
 
-
-
 			<Pressable onPress={() => navigation.navigate("Login")}>
 				<Text className="mt-10">
 					Já tem uma conta? Entre

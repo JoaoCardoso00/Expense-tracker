@@ -1,4 +1,4 @@
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Pressable } from 'react-native';
 import { StatusBar } from '../components/Status';
 import { Button } from '../components/Button';
 import { PlusIcon } from 'react-native-heroicons/solid';
@@ -6,6 +6,7 @@ import { Expenses } from '../components/Expenses';
 import { Expense } from '../components/Expense';
 import { useContext } from 'react';
 import { UserContext } from '../lib/context';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const expenses: Expense[] = [
 	{
@@ -51,7 +52,17 @@ const expensesGroup = [
 	},
 ]
 
-export function Home() {
+type AppStackParamList = {
+	Inicio: undefined;
+	Status: undefined;
+	"Novo Gasto": undefined;
+};
+
+type HomeScreenProps = {
+	navigation: StackNavigationProp<AppStackParamList, 'Inicio'>;
+};
+
+export function Home({ navigation }: HomeScreenProps) {
 
 	const { user } = useContext(UserContext)
 
@@ -65,13 +76,13 @@ export function Home() {
 				<Image source={{ uri: "https://avatar.iran.liara.run/public/39" }} className="h-12 w-12" />
 			</View>
 			<View className="my-4" />
-			<View>
+			<Pressable onPress={() => navigation.navigate("Status")}>
 				<StatusBar />
-			</View>
+			</Pressable>
 			<View className="my-4" />
 			<View className="items-start w-full px-6 text-gray-800">
 				<Text className="text-base-gray-2">Gastos</Text>
-				<Button icon={<PlusIcon color="#f3f4f6" />}>
+				<Button icon={<PlusIcon color="#f3f4f6" />} onPress={() => navigation.navigate("Novo Gasto")}>
 					<Text className="text-gray-100 font-semibold ml-2">Novo gasto</Text>
 				</Button>
 			</View>

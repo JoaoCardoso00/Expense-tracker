@@ -7,6 +7,7 @@ import { Login } from './src/screens/login';
 import { UserContext } from './src/lib/context';
 import { useUserData } from './src/lib/hooks';
 import { Register } from './src/screens/register';
+import { CreateExpense } from './src/screens/createExpense';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -23,8 +24,9 @@ function AppNavigator() {
         drawerActiveTintColor: "#121214"
       }
       } >
-      <Drawer.Screen name='Home' component={Home} />
-      <Drawer.Screen name='Stats' component={Stats} />
+      <Drawer.Screen name='Inicio' component={Home} />
+      <Drawer.Screen name='Status' component={Stats} />
+      <Drawer.Screen name='Novo Gasto' component={CreateExpense} />
     </Drawer.Navigator>
   )
 }
