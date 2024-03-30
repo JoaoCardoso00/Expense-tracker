@@ -4,8 +4,9 @@ import { View, Text, TextInput, Alert, Pressable } from "react-native";
 import { Button } from "../components/Button";
 import { useForm, Controller } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { auth, firestore } from "../lib/firebase";
 import { z } from "zod";
+import { doc, setDoc } from "firebase/firestore";
 
 type RootStackParamList = {
 	AppNavigator: undefined;

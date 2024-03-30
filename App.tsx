@@ -8,6 +8,8 @@ import { UserContext } from './src/lib/context';
 import { useUserData } from './src/lib/hooks';
 import { Register } from './src/screens/register';
 import { CreateExpense } from './src/screens/createExpense';
+import { Info } from './src/screens/info';
+import { Edit } from './src/screens/edit';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -26,6 +28,16 @@ function AppNavigator() {
       } >
       <Drawer.Screen name='Inicio' component={Home} />
       <Drawer.Screen name='Status' component={Stats} />
+      <Drawer.Screen name='Info' component={Info} options={
+        {
+          drawerItemStyle: { height: 0 }
+        }
+      } />
+      <Drawer.Screen name='Edit' component={Edit} options={
+        {
+          drawerItemStyle: { height: 0 }
+        }
+      } />
       <Drawer.Screen name='Novo Gasto' component={CreateExpense} />
     </Drawer.Navigator>
   )
@@ -39,8 +51,8 @@ export default function App() {
     <UserContext.Provider value={userData}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='AppNavigator' component={AppNavigator} />
           <Stack.Screen name='Login' component={Login} />
+          <Stack.Screen name='AppNavigator' component={AppNavigator} />
           <Stack.Screen name='Register' component={Register} />
         </Stack.Navigator>
       </NavigationContainer >

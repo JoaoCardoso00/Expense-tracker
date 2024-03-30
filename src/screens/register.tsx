@@ -4,8 +4,9 @@ import { View, Text, TextInput, Alert, Pressable } from "react-native";
 import { Button } from "../components/Button";
 import { useForm, Controller } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { auth, firestore } from "../lib/firebase";
 import { z } from "zod";
+import { doc, setDoc } from "firebase/firestore";
 
 type RootStackParamList = {
 	AppNavigator: undefined;
@@ -40,7 +41,14 @@ export function Register({ navigation }: RegisterPageProps) {
 		}
 
 		try {
-			await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+			const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+
+			const userDoc = doc(firestore, "users", `${userCredentials.user.uid}`)
+
+			await setDoc(userDoc, {
+				email: userCredentials.user.email,
+			})
+
 			navigation.navigate("AppNavigator");
 		} catch (error) {
 			Alert.alert("Erro ao realizar registro, por favor tente novamente");

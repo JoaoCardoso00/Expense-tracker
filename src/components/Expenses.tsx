@@ -1,25 +1,25 @@
 import { View, Text, FlatList, Image } from "react-native"
-import { Expense } from "./Expense"
 import { ExpenseList } from "./ExpenseList"
 import { cn } from "../utils/cn"
+import { ExpenseGroup } from "../utils/fetchUserExpenses"
+import { formatDate } from "../utils/formatDate"
+import { StackNavigationProp } from "@react-navigation/stack"
+import { AppStackParamList } from "../screens/home"
 
 type ExpensesProps = {
-	expenseGroup: {
-		id: number
-		date: string
-		expenses: Expense[]
-	}[]
+	expenses: ExpenseGroup[]
+	navigation: StackNavigationProp<AppStackParamList, 'Inicio'>;
 }
 
-export function Expenses({ expenseGroup }: ExpensesProps) {
+export function Expenses({ expenses, navigation }: ExpensesProps) {
 	return (
 		<View className="flex-1 relative w-full">
 			<FlatList
-				data={expenseGroup}
+				data={expenses}
 				renderItem={({ item, index }) => (
 					<View className={cn("justify-start flex w-full", index === 0 ? "mt-0" : "mt-8")}>
-						<Text className="text-lg font-semibold mb-1">{item.date}</Text>
-						<ExpenseList expenses={item.expenses} />
+						<Text className="text-lg font-semibold mb-1">{formatDate(item.date)}</Text>
+						<ExpenseList expenses={item.expenses} navigation={navigation} />
 					</View>
 				)}
 				keyExtractor={(item) => item.id}

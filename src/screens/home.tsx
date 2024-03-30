@@ -3,58 +3,21 @@ import { StatusBar } from '../components/Status';
 import { Button } from '../components/Button';
 import { PlusIcon } from 'react-native-heroicons/solid';
 import { Expenses } from '../components/Expenses';
-import { Expense } from '../components/Expense';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../lib/context';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Expense, ExpenseGroup, fetchAndGroupExpenses } from '../utils/fetchUserExpenses';
+import { useExpensesStore } from '../store/ExpensesStore';
 
-const expenses: Expense[] = [
-	{
-		id: 14294124,
-		cost: 20,
-		title: "Hamburguer",
-		category: {
-			title: "comidas",
-			color: "#7c3aed"
-		}
-	},
-	{
-		id: 21241241,
-		cost: 20,
-		title: "Hamburguer",
-		category: {
-			title: "comidas",
-			color: "#7c3aed"
-		}
-	}
-]
-
-const expensesGroup = [
-	{
-		id: 1,
-		date: "02.01.2024",
-		expenses: expenses
-	},
-	{
-		id: 2,
-		date: "05.01.2024",
-		expenses: expenses
-	},
-	{
-		id: 4,
-		date: "05.01.2024",
-		expenses: expenses
-	},
-	{
-		id: 3,
-		date: "05.01.2024",
-		expenses: expenses
-	},
-]
-
-type AppStackParamList = {
+export type AppStackParamList = {
 	Inicio: undefined;
 	Status: undefined;
+	Info: {
+		expense: Expense
+	}
+	Edit: {
+		expense: Expense
+	}
 	"Novo Gasto": undefined;
 };
 
@@ -63,10 +26,22 @@ type HomeScreenProps = {
 };
 
 export function Home({ navigation }: HomeScreenProps) {
+	const { expenses, setExpenses } = useExpensesStore()
 
 	const { user } = useContext(UserContext)
 
-	console.log(user)
+	const loadExpenses = async () => {
+		try {
+			const expenseGroupAnswer = await fetchAndGroupExpenses(user?.uid!);
+			setExpenses(expenseGroupAnswer);
+		} catch (err) {
+			console.log(err)
+		}
+	};
+
+	useEffect(() => {
+		loadExpenses();
+	}, []);
 
 	return (
 		<View className="bg-base-gray-7 flex-1 items-center h-full" >
@@ -87,7 +62,7 @@ export function Home({ navigation }: HomeScreenProps) {
 				</Button>
 			</View>
 			<View className="my-4" />
-			<Expenses expenseGroup={expensesGroup} />
+			<Expenses expenses={expenses} navigation={navigation} />
 			<Image source={require('../../assets/blur-native.png')} className="absolute bottom-0 w-full" />
 		</View>
 	)
