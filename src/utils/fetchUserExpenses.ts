@@ -6,8 +6,8 @@ export type Expense = {
 	cost: number;
 	name: string;
 	category: string;
-	date: Date;
 	description: string;
+	date: Date; // ISO date string
 };
 
 export type ExpenseGroup = {
@@ -32,7 +32,7 @@ export async function fetchAndGroupExpenses(userId: string): Promise<ExpenseGrou
 			expensesByDay.set(expenseDateKey, []);
 		}
 
-		expensesByDay.get(expenseDateKey).push({ id: doc.id, ...expense, data: expenseDateObj });
+		expensesByDay.get(expenseDateKey).push({ id: doc.id, ...expense, date: expenseDateObj });
 	});
 
 	const expensesGroup: ExpenseGroup[] = Array.from(expensesByDay).map(([dateKey, expenses], index) => ({

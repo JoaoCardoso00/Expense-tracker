@@ -17,13 +17,12 @@ export function Expenses({ expenses, navigation }: ExpensesProps) {
 			<FlatList
 				data={expenses}
 				renderItem={({ item, index }) => (
-					<View className={cn("justify-start flex w-full", index === 0 ? "mt-0" : "mt-8")}>
+					<View key={item.id} className={cn("justify-start flex w-full", index === 0 ? "mt-0" : "mt-8", index === expenses.length - 1 ? "mb-20" : "mb-0")}>
 						<Text className="text-lg font-semibold mb-1">{formatDate(item.date)}</Text>
 						<ExpenseList expenses={item.expenses} navigation={navigation} />
 					</View>
 				)}
-				keyExtractor={(item) => item.id}
-				className="w-full px-6 pt-4"
+				className="w-full px-6 pt-4 pb-6"
 			/>
 			<Image source={require('../../assets/blur-top.png')} className="absolute top-0 w-full" />
 		</View>
