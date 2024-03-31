@@ -61,9 +61,8 @@ export function Home({ navigation }: HomeScreenProps) {
 					<Text className="text-gray-100 font-semibold ml-2">Novo gasto</Text>
 				</Button>
 			</View>
-			<View className="my-4" />
 			<Expenses expenses={expenses} navigation={navigation} />
-			<Image source={require('../../assets/blur-native.png')} className="absolute bottom-0 w-full" />
+			<Image source={require('../../assets/blur-native.png')} className="absolute -bottom-6 w-full" />
 		</View>
 	)
 }

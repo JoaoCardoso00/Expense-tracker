@@ -12,10 +12,9 @@ import { convertToFirebaseTimestamp } from '../utils/convertDate';
 import { doc, setDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useExpensesStore } from '../store/ExpensesStore';
-import { fetchAndGroupExpenses } from '../utils/fetchUserExpenses';
 import { AppStackParamList } from './home';
-
+import { refreshExpenses } from '../utils/refreshExpenses';
+import uuid from 'react-native-uuid';
 const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 type newExpenseScreenProps = {
@@ -44,7 +43,6 @@ const expenseSchema = z.object({
 type ExpenseFormData = z.infer<typeof expenseSchema>;
 
 export function CreateExpense({ navigation }: newExpenseScreenProps) {
-	const { expenses, setExpenses } = useExpensesStore()
 	const [showModal, setShowModal] = useState(false)
 	const [currentColor, setCurrentColor] = useState("white")
 
@@ -57,6 +55,7 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 	const onSubmit = async (data: ExpenseFormData) => {
 
 		const expense = {
+			id: uuid.v4(),
 			name: data.name,
 			cost: data.cost,
 			description: data.description,
@@ -64,14 +63,9 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 			category: data.category
 		}
 
-		await setDoc(doc(firestore, 'users', user?.uid, 'expenses', data.name), expense)
+		await setDoc(doc(firestore, 'users', user?.uid, 'expenses', expense.id), expense)
 
-		try {
-			const expenseGroupAnswer = await fetchAndGroupExpenses(user?.uid!);
-			setExpenses(expenseGroupAnswer);
-		} catch (err) {
-			console.log(err)
-		}
+		await refreshExpenses(user?.uid)
 
 		setValue('name', "")
 		setValue('category', "")

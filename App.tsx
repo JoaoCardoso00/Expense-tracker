@@ -28,6 +28,7 @@ function AppNavigator() {
       } >
       <Drawer.Screen name='Inicio' component={Home} />
       <Drawer.Screen name='Status' component={Stats} />
+      <Drawer.Screen name='Novo Gasto' component={CreateExpense} />
       <Drawer.Screen name='Info' component={Info} options={
         {
           drawerItemStyle: { height: 0 }
@@ -35,10 +36,9 @@ function AppNavigator() {
       } />
       <Drawer.Screen name='Edit' component={Edit} options={
         {
-          drawerItemStyle: { height: 0 }
+          drawerItemStyle: { height: 0 },
         }
       } />
-      <Drawer.Screen name='Novo Gasto' component={CreateExpense} />
     </Drawer.Navigator>
   )
 }
