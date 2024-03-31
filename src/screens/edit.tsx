@@ -97,9 +97,8 @@ export function Edit({ route, navigation }: EditScreenProps) {
 	};
 
 	useEffect(() => {
-		const date = new Date(expense.date.seconds * 1000);
 
-		const formattedDate = date.toLocaleDateString('en-GB', {
+		const formattedDate = expense.date.toLocaleDateString('en-GB', {
 			day: '2-digit',
 			month: '2-digit',
 			year: 'numeric'

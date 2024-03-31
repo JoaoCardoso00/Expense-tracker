@@ -21,11 +21,8 @@ export function Info({ route, navigation }: InfoScreenProps) {
 	const { user } = useContext(UserContext)
 	const { expense } = route.params
 
-	// Convert the seconds to milliseconds and create a Date object
-	const date = new Date(expense.date.seconds * 1000);
-
 	// Format the date as dd/mm/yyyy
-	const formattedDate = date.toLocaleDateString('en-GB', {
+	const formattedDate = expense.date.toLocaleDateString('en-GB', {
 		day: '2-digit',
 		month: '2-digit',
 		year: 'numeric'

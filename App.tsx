@@ -10,6 +10,7 @@ import { Register } from './src/screens/register';
 import { CreateExpense } from './src/screens/createExpense';
 import { Info } from './src/screens/info';
 import { Edit } from './src/screens/edit';
+import { Search } from './src/screens/search';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -27,7 +28,8 @@ function AppNavigator() {
       }
       } >
       <Drawer.Screen name='Inicio' component={Home} />
-      <Drawer.Screen name='Status' component={Stats} />
+      <Drawer.Screen name='Busca' component={Search} />
+      <Drawer.Screen name='Estatísticas' component={Stats} />
       <Drawer.Screen name='Novo Gasto' component={CreateExpense} />
       <Drawer.Screen name='Info' component={Info} options={
         {

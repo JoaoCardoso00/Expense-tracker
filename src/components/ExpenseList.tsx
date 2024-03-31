@@ -7,7 +7,7 @@ import { AppStackParamList } from "../screens/home"
 
 type ExpenseListProps = {
 	expenses: ExpenseType[]
-	navigation: StackNavigationProp<AppStackParamList, 'Inicio'>;
+	navigation: StackNavigationProp<AppStackParamList, 'Inicio' | 'Busca'>;
 }
 
 

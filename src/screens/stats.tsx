@@ -83,7 +83,7 @@ export function Stats() {
 		<View className="px-6 pt-10">
 			<Text className="font-bold mb-2">Gastos nos últimos 5 dias</Text>
 			<BarChart key={chartKey} yAxisLabelPrefix="R$" yAxisTextStyle={{ marginRight: "auto" }} horizontalRulesStyle={{ marginLeft: 6 }} data={expensesFromLastFiveDays} />
-			<Text className="font-bold mb-2 mt-6">% dos gastos totais por categoria no último mês</Text>
+			<Text className="font-bold mb-2 mt-6">% dos gastos totais por categoria nos últimos 30 dias</Text>
 			<View className="relative">
 				<PieChart
 					data={pieGraphData}
