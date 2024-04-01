@@ -24,11 +24,11 @@ import { Loading } from "../components/Loading";
 const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 const expenseSchema = z.object({
-	name: z.string().nonempty("Nome é obrigatório"),
-	description: z.string().nonempty("Descrição é obrigatória"),
-	cost: z.number().nonnegative("Custo não pode ser negativo"),
+	name: z.string().min(1, { message: "Nome é obrigatório" }),
+	description: z.string().min(1, { message: "Descrição é obrigatória" }),
+	cost: z.number().nonnegative({ message: "Custo não pode ser negativo" }),
 	date: z.string()
-		.nonempty("Data é obrigatória")
+		.min(1, { message: "Data é obrigatória" })
 		.regex(dateRegex, { message: "Data deve estar no formato DD/MM/YYYY" })
 		.refine((date) => {
 			const [day, month, year] = date.split('/').map(Number);
@@ -39,7 +39,7 @@ const expenseSchema = z.object({
 		}, {
 			message: "Data inválida",
 		}),
-	category: z.string().nonempty("Categoria é obrigatória")
+	category: z.string().min(1, { message: "Categoria é obrigatória" })
 });
 
 type ExpenseFormData = z.infer<typeof expenseSchema>;
