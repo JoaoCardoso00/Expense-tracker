@@ -11,13 +11,13 @@ import { useExpensesStore } from '../store/ExpensesStore';
 
 export type AppStackParamList = {
 	Inicio: undefined;
-	Estatisticas: undefined;
 	Info: {
 		expense: Expense
 	}
 	Edit: {
 		expense: Expense
 	}
+	'Estatísticas': undefined;
 	"Novo Gasto": undefined;
 	Busca: undefined;
 };
@@ -52,7 +52,7 @@ export function Home({ navigation }: HomeScreenProps) {
 				<Image source={{ uri: "https://avatar.iran.liara.run/public/39" }} className="h-12 w-12" />
 			</View>
 			<View className="my-4" />
-			<Pressable onPress={() => navigation.navigate("Estatisticas")}>
+			<Pressable onPress={() => navigation.navigate("Estatísticas")}>
 				<StatusBar />
 			</Pressable>
 			<View className="my-4" />

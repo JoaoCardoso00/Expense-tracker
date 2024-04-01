@@ -76,13 +76,12 @@ export function Stats() {
 
 		setChartKey(chartKey + 1)
 
-
 	}, [expenses]);
 
 	return (
-		<View className="px-6 pt-10">
+		<View className="px-6 pt-10 bg-base-gray-7">
 			<Text className="font-bold mb-2">Gastos nos últimos 5 dias</Text>
-			<BarChart key={chartKey} yAxisLabelPrefix="R$" yAxisTextStyle={{ marginRight: "auto" }} horizontalRulesStyle={{ marginLeft: 6 }} data={expensesFromLastFiveDays} />
+			<BarChart key={chartKey} yAxisLabelPrefix="R$" yAxisTextStyle={{ marginRight: "auto" }} horizontalRulesStyle={{ marginLeft: 6 }} yAxisLabelWidth={50} data={expensesFromLastFiveDays} />
 			<Text className="font-bold mb-2 mt-6">% dos gastos totais por categoria nos últimos 30 dias</Text>
 			<View className="relative">
 				<PieChart

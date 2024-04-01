@@ -16,7 +16,7 @@ export function ExpenseList({ expenses, navigation }: ExpenseListProps) {
 		<>
 			{
 				expenses.map((expense, idx) => (
-					<View className={cn(idx === 0 ? "mt-0" : "mt-2")}>
+					<View className={cn(idx === 0 ? "mt-0" : "mt-2")} key={expense.id}>
 						<Pressable onPress={() => navigation.navigate("Info", { expense: expense })}>
 							<Expense expense={expense} />
 						</Pressable>

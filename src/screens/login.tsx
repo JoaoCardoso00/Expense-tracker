@@ -7,6 +7,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "../lib/firebase";
 import { z } from "zod";
 import { doc, setDoc } from "firebase/firestore";
+import { useState } from "react";
+import { Loading } from "../components/Loading";
 
 type RootStackParamList = {
 	AppNavigator: undefined;
@@ -26,11 +28,13 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function Login({ navigation }: LoginPageProps) {
+	const [isLoading, setIsLoading] = useState(false)
 	const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: zodResolver(formSchema)
 	});
 
 	async function handleLogin(formData: FormData) {
+		setIsLoading(true)
 		try {
 			await signInWithEmailAndPassword(auth, formData.email, formData.password);
 			navigation.navigate("AppNavigator");
@@ -38,6 +42,7 @@ export function Login({ navigation }: LoginPageProps) {
 			console.log(error)
 			Alert.alert("Erro ao realizar autenticação, por favor tente novamente");
 		}
+		setIsLoading(false)
 	}
 
 	return (
@@ -88,9 +93,14 @@ export function Login({ navigation }: LoginPageProps) {
 
 			<View className="w-full px-6 mt-4">
 				<Button onPress={handleSubmit(handleLogin)}>
-					<Text className="text-base-gray-7 font-semibold">
-						Entrar
-					</Text>
+					{isLoading ? (
+						<Loading />
+					) : (
+						<Text className="text-base-gray-7 font-semibold">
+							Entrar
+						</Text>
+					)}
+
 				</Button>
 			</View>
 			<Pressable onPress={() => navigation.navigate("Register")}>

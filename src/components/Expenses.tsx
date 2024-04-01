@@ -8,14 +8,17 @@ import { AppStackParamList } from "../screens/home"
 
 type ExpensesProps = {
 	expenses: ExpenseGroup[]
+	showScroll?: boolean
 	navigation: StackNavigationProp<AppStackParamList, 'Inicio' | 'Busca'>;
 }
 
-export function Expenses({ expenses, navigation }: ExpensesProps) {
+export function Expenses({ expenses, navigation, showScroll = true }: ExpensesProps) {
 	return (
 		<View className="flex-1 relative w-full">
 			<FlatList
 				data={expenses}
+				showsVerticalScrollIndicator={showScroll}
+				keyExtractor={(item) => String(item.id)}
 				renderItem={({ item, index }) => (
 					<View key={item.id} className={cn("justify-start flex w-full", index === 0 ? "mt-0" : "mt-8", index === expenses.length - 1 ? "mb-20" : "mb-0")}>
 						<Text className="text-lg font-semibold mb-1">{formatDate(item.date)}</Text>

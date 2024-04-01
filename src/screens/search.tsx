@@ -62,20 +62,16 @@ export function Search({ navigation }: SearchScreenProps) {
 						{currentColor === 'white' && <EyeDropperIcon color="gray" />}
 					</Pressable>
 				</View>
-				<View className="w-12 h-12 ml-2">
-					<Pressable className="aspect-square bg-base-gray-2 items-center justify-center h-full rounded-lg" onPress={searchExpenses}>
-						<MagnifyingGlassIcon color="white" />
-					</Pressable>
-				</View>
 			</View>
 			<View className="w-full flex-1">
 				{
 					filteredExpenses.length === 0 ? (
-						<View>
-							<Text>Sem resultados encontrados</Text>
+						<View className="flex-1 items-center pt-20">
+							<Text className="text-2xl text-base-gray-3 mb-4">Sem resultados encontrados </Text>
+							<Image source={require('../../assets/not-found.png')} className="h-72 w-56" />
 						</View>
 					) : (
-						<Expenses expenses={filteredExpenses} navigation={navigation} />
+						<Expenses showScroll={false} expenses={filteredExpenses} navigation={navigation} />
 					)
 				}
 			</View>

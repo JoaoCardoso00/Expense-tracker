@@ -12,12 +12,15 @@ import MaskInput, { Masks } from 'react-native-mask-input';
 import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 import { UserContext } from '../lib/context';
 import { convertToFirebaseTimestamp } from '../utils/convertDate';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { refreshExpenses } from '../utils/refreshExpenses';
 import { getUpdatedFields } from "../utils/getUpdatedFields";
 import { parseDateString } from "../utils/parseDateString";
 import { XMarkIcon } from "react-native-heroicons/solid";
+import { Loading } from "../components/Loading";
+
+
 const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 const expenseSchema = z.object({
@@ -51,6 +54,7 @@ type EditScreenProps = {
 export function Edit({ route, navigation }: EditScreenProps) {
 	const { expense } = route.params
 	const [showModal, setShowModal] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const [currentColor, setCurrentColor] = useState("white")
 
 	const { user } = useContext(UserContext)
@@ -60,6 +64,8 @@ export function Edit({ route, navigation }: EditScreenProps) {
 	});
 
 	const onSubmit = async (data: ExpenseFormData) => {
+
+		setIsLoading(true)
 
 		const updatedExpense = {
 			name: data.name,
@@ -81,6 +87,8 @@ export function Edit({ route, navigation }: EditScreenProps) {
 		await updateDoc(doc(firestore, 'users', user?.uid, 'expenses', expense.id), parsedFields)
 
 		refreshExpenses(user?.uid)
+
+		setIsLoading(false)
 
 		setValue('name', "")
 		setValue('category', "")
@@ -229,8 +237,12 @@ export function Edit({ route, navigation }: EditScreenProps) {
 				</View>
 			</Modal>
 
-			<Button className="mt-10" onPress={handleSubmit(onSubmit)}>
-				<Text className="text-base-gray-7 font-bold">Editar Gasto</Text>
+			<Button className="mt-10 h-10" onPress={handleSubmit(onSubmit)}>
+				{isLoading ? (
+					<Loading />
+				) : (
+					<Text className="text-base-gray-7 font-bold">Editar Gasto</Text>
+				)}
 			</Button>
 		</View>
 	);

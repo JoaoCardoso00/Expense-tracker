@@ -15,6 +15,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AppStackParamList } from './home';
 import { refreshExpenses } from '../utils/refreshExpenses';
 import uuid from 'react-native-uuid';
+import { Loader } from 'lucide-react-native';
+import { Loading } from '../components/Loading';
 const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
 type newExpenseScreenProps = {
@@ -44,6 +46,7 @@ type ExpenseFormData = z.infer<typeof expenseSchema>;
 
 export function CreateExpense({ navigation }: newExpenseScreenProps) {
 	const [showModal, setShowModal] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const [currentColor, setCurrentColor] = useState("white")
 
 	const { user } = useContext(UserContext)
@@ -53,6 +56,8 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 	});
 
 	const onSubmit = async (data: ExpenseFormData) => {
+
+		setIsLoading(true)
 
 		const expense = {
 			id: uuid.v4(),
@@ -73,6 +78,8 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 		setValue('cost', 0)
 		setValue('date', "")
 		setValue('category', "white")
+
+		setIsLoading(false)
 
 		navigation.navigate("Inicio")
 	};
@@ -97,6 +104,7 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 							onChangeText={field.onChange}
 							onBlur={field.onBlur}
 							value={field.value}
+							keyboardType='numeric'
 							className="shadow-lg w-full border px-1.5 border-base-gray-5 rounded-md py-1.5 text-lg"
 						/>
 					)}
@@ -156,6 +164,7 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 						render={({ field }) => (
 							<MaskInput
 								value={field.value}
+								keyboardType='numeric'
 								onChangeText={field.onChange}
 								mask={Masks.DATE_DDMMYYYY}
 								className="px-1.5 shadow-lg w-full border border-base-gray-5 rounded-md py-1.5 text-lg"
@@ -198,8 +207,12 @@ export function CreateExpense({ navigation }: newExpenseScreenProps) {
 				</View>
 			</Modal>
 
-			<Button className="mt-10" onPress={handleSubmit(onSubmit)}>
-				<Text className="text-base-gray-7 font-bold">Criar Gasto</Text>
+			<Button className="mt-10 h-10" onPress={handleSubmit(onSubmit)}>
+				{isLoading ? (
+					<Loading />
+				) : (
+					<Text className="text-base-gray-7 font-bold">Criar Gasto</Text>
+				)}
 			</Button>
 		</View>
 	);

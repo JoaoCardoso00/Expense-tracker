@@ -7,6 +7,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "../lib/firebase";
 import { z } from "zod";
 import { doc, setDoc } from "firebase/firestore";
+import { Loading } from "../components/Loading";
+import { useState } from "react";
 
 type RootStackParamList = {
 	AppNavigator: undefined;
@@ -30,6 +32,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function Register({ navigation }: RegisterPageProps) {
+	const [isLoading, setIsLoading] = useState(false)
 	const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: zodResolver(formSchema)
 	});
@@ -39,6 +42,8 @@ export function Register({ navigation }: RegisterPageProps) {
 			Alert.alert("As senhas não coincidem!");
 			return;
 		}
+
+		setIsLoading(true)
 
 		try {
 			const userCredentials = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
@@ -53,6 +58,8 @@ export function Register({ navigation }: RegisterPageProps) {
 		} catch (error) {
 			Alert.alert("Erro ao realizar registro, por favor tente novamente");
 		}
+
+		setIsLoading(false)
 	}
 
 	return (
@@ -123,9 +130,14 @@ export function Register({ navigation }: RegisterPageProps) {
 
 			<View className="w-full px-6 mt-4">
 				<Button onPress={handleSubmit(handleRegister)}>
-					<Text className="text-base-gray-7 font-semibold">
-						Registrar
-					</Text>
+					{isLoading ? (
+						<Loading color="white" />
+					) : (
+						<Text className="text-base-gray-7 font-semibold">
+							Registrar
+						</Text>
+					)}
+
 				</Button>
 			</View>
 
